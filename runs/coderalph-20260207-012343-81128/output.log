@@ -1,0 +1,15 @@
+cat: "/Users/ralph/setup/runs/coderalph-20260207-012343-81128/prompt.md": No such file or directory
+OpenAI Codex v0.98.0 (research preview)
+--------
+workdir: /Users/ralph/setup/runs/coderalph-20260207-012343-81128/worktree
+model: gpt-5.2-codex
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: none
+reasoning summaries: auto
+session id: 019c36c5-43ca-7113-91cc-281b0fb8cd8f
+--------
+user
+
+mcp startup: no servers
