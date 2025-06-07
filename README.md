@@ -1,3 +1,5 @@
+> **WARNING: This experiment failed. Do not attempt to replicate this setup.** The hierarchical agent architecture described below did not work as intended and is not a viable approach. This repo is preserved for reference only.
+
 # ralph
 
 A hierarchical AI agent system that runs GroupScholar autonomously. Start it once, walk away.
