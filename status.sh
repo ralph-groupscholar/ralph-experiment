@@ -3,6 +3,15 @@
 RALPH_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$RALPH_DIR/state/helpers.sh"
 
+VERBOSE=0
+case "${1:-}" in
+  -v|--verbose) VERBOSE=1 ;;
+  -h|--help)
+    echo "Usage: ./status.sh [-v|--verbose]"
+    exit 0
+    ;;
+esac
+
 # ── Colors ──────────────────────────────────────────────────────────
 BOLD='\033[1m'
 DIM='\033[2m'
@@ -30,15 +39,45 @@ type_label() {
   esac
 }
 
+to_epoch() {
+  local ts="$1"
+  if [ -z "$ts" ] || [ "$ts" = "null" ]; then
+    echo ""
+    return
+  fi
+  date -u -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" +%s 2>/dev/null || echo ""
+}
+
+format_duration() {
+  local total="$1"
+  if [ -z "$total" ]; then
+    echo ""
+    return
+  fi
+  local hours=$((total / 3600))
+  local minutes=$(((total % 3600) / 60))
+  local seconds=$((total % 60))
+
+  if [ "$hours" -gt 0 ]; then
+    echo "${hours}h ${minutes}m"
+  elif [ "$minutes" -gt 0 ]; then
+    echo "${minutes}m ${seconds}s"
+  else
+    echo "${seconds}s"
+  fi
+}
+
 # ── Print a node and its children recursively ───────────────────────
 print_node() {
   local id="$1" indent="$2"
-  local status type task pid alive
+  local status type task pid alive started ended line details duration
 
   status=$(ralph_get "$id" status)
   type=$(ralph_get "$id" type)
   task=$(ralph_get "$id" task)
   pid=$(ralph_get "$id" pid)
+  started=$(ralph_get "$id" started_at)
+  ended=$(ralph_get "$id" ended_at)
 
   # Check if process is actually alive
   alive=""
@@ -50,7 +89,40 @@ print_node() {
     fi
   fi
 
-  echo -e "${indent}$(status_icon "$status") $(type_label "$type")  ${task}  ${alive}"
+  line="${indent}$(status_icon "$status") $(type_label "$type")  ${task}"
+  if [ -n "$alive" ]; then
+    line="$line  ${alive}"
+  fi
+
+  if [ "$VERBOSE" -eq 1 ]; then
+    local start_epoch end_epoch now_epoch
+    details=""
+    if [ -n "$started" ] && [ "$started" != "null" ]; then
+      details="start ${started}"
+      start_epoch=$(to_epoch "$started")
+    fi
+
+    if [ -n "$ended" ] && [ "$ended" != "null" ]; then
+      details="${details} | end ${ended}"
+      end_epoch=$(to_epoch "$ended")
+    elif [ "$status" = "running" ]; then
+      now_epoch=$(date -u +%s)
+      end_epoch="$now_epoch"
+    fi
+
+    if [ -n "$start_epoch" ] && [ -n "$end_epoch" ]; then
+      duration=$(format_duration "$((end_epoch - start_epoch))")
+      if [ -n "$duration" ]; then
+        details="${details} | dur ${duration}"
+      fi
+    fi
+
+    if [ -n "$details" ]; then
+      line="$line  ${DIM}${details}${RESET}"
+    fi
+  fi
+
+  echo -e "$line"
 
   # Print children
   local children
@@ -65,6 +137,12 @@ echo ""
 echo -e "  ${CYAN}${BOLD}ralph status${RESET}"
 echo -e "  ${DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
 echo ""
+
+if [ ! -f "$RALPH_STATE" ]; then
+  echo -e "  ${DIM}Finds no state file. Runs ./start.sh first.${RESET}"
+  echo ""
+  exit 0
+fi
 
 agent_count=$(jq '.agents | length' "$RALPH_STATE")
 

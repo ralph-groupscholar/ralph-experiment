@@ -37,6 +37,7 @@ BigRalph (CEO, runs forever)
 |---------|-------------|
 | `./start.sh` | Launch BigRalph (the only command you need) |
 | `./status.sh` | View the agent tree |
+| `./status.sh --verbose` | View the agent tree with timestamps and durations |
 | `./health.sh` | Summarize agent health, stale processes, and oldest running agent |
 | `./sweep.sh` | Marks stale running agents as failed in state |
 | `./stop.sh` | Emergency stop all agents |
