@@ -13,32 +13,57 @@ YELLOW='\033[0;33m'
 RED='\033[0;31m'
 RESET='\033[0m'
 
+to_epoch() {
+  local ts="$1"
+  if [ -z "$ts" ] || [ "$ts" = "null" ]; then
+    echo ""
+    return
+  fi
+  date -u -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" +%s 2>/dev/null || echo ""
+}
+
+format_duration() {
+  local total="$1"
+  if [ -z "$total" ]; then
+    echo ""
+    return
+  fi
+  if [ "$total" -lt 0 ]; then
+    total=0
+  fi
+
+  local days=$((total / 86400))
+  local hours=$(((total % 86400) / 3600))
+  local minutes=$(((total % 3600) / 60))
+  local seconds=$((total % 60))
+
+  local parts=""
+  if [ "$days" -gt 0 ]; then
+    parts="${days}d"
+  fi
+  if [ "$hours" -gt 0 ]; then
+    parts="${parts}${parts:+ }${hours}h"
+  fi
+  if [ "$minutes" -gt 0 ]; then
+    parts="${parts}${parts:+ }${minutes}m"
+  fi
+  if [ -z "$parts" ]; then
+    parts="${seconds}s"
+  fi
+
+  echo "$parts"
+}
+
 human_duration() {
   local start="$1" end="$2"
-  python3 - <<PY
-from datetime import datetime, timezone
-start = "$start"
-end = "$end"
-fmt = "%Y-%m-%dT%H:%M:%SZ"
-start_dt = datetime.strptime(start, fmt).replace(tzinfo=timezone.utc)
-end_dt = datetime.strptime(end, fmt).replace(tzinfo=timezone.utc)
-seconds = int((end_dt - start_dt).total_seconds())
-if seconds < 0:
-    seconds = 0
-parts = []
-days, rem = divmod(seconds, 86400)
-hours, rem = divmod(rem, 3600)
-minutes, secs = divmod(rem, 60)
-if days:
-    parts.append(f"{days}d")
-if hours:
-    parts.append(f"{hours}h")
-if minutes:
-    parts.append(f"{minutes}m")
-if not parts:
-    parts.append(f"{secs}s")
-print(" ".join(parts))
-PY
+  local start_epoch end_epoch
+  start_epoch=$(to_epoch "$start")
+  end_epoch=$(to_epoch "$end")
+  if [ -z "$start_epoch" ] || [ -z "$end_epoch" ]; then
+    echo ""
+    return
+  fi
+  format_duration "$((end_epoch - start_epoch))"
 }
 
 echo ""

@@ -8,3 +8,6 @@
 ## 2026-02-07
 - Adds a health command to summarize agent counts, stale processes, and oldest running agent.
 - Documents the new health command in the README.
+
+## 2026-02-07
+- Replaces health duration calculation with pure bash/date to avoid python3 dependency.
