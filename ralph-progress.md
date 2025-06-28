@@ -10,4 +10,8 @@
 - Documents the new health command in the README.
 
 ## 2026-02-07
+- Adds a snapshot command that archives state and a markdown summary.
+- Documents the new snapshot command in the README.
+
+## 2026-02-07
 - Replaces health duration calculation with pure bash/date to avoid python3 dependency.
