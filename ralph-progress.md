@@ -15,3 +15,7 @@
 
 ## 2026-02-07
 - Replaces health duration calculation with pure bash/date to avoid python3 dependency.
+
+## 2026-02-07
+- Adds a state audit command to flag inconsistent or stale agent entries.
+- Documents the new audit command in the README.

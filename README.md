@@ -39,6 +39,7 @@ BigRalph (CEO, runs forever)
 | `./status.sh` | View the agent tree |
 | `./status.sh --verbose` | View the agent tree with timestamps and durations |
 | `./health.sh` | Summarize agent health, stale processes, and oldest running agent |
+| `./audit.sh` | Audits the state file for inconsistencies and stale data |
 | `./sweep.sh` | Marks stale running agents as failed in state |
 | `./snapshot.sh` | Captures a timestamped state snapshot and summary |
 | `./stop.sh` | Emergency stop all agents |
