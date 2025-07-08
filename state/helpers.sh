@@ -49,10 +49,24 @@ ralph_register() {
 # Status: running | done | failed
 ralph_update_status() {
   local id="$1" status="$2"
+  local now
+  now="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   _ralph_update jq \
     --arg id "$id" \
     --arg status "$status" \
-    '.agents[$id].status = $status' "$RALPH_STATE"
+    --arg now "$now" \
+    '
+      .agents[$id].status = $status
+      | if ($status == "running") then
+          .agents[$id].ended_at = null
+        else
+          .agents[$id].ended_at = (.agents[$id].ended_at // $now)
+        end
+      | if (.agents[$id].started_at == null or .agents[$id].started_at == "") then
+          .agents[$id].started_at = $now
+        else .
+        end
+    ' "$RALPH_STATE"
 }
 
 # ── Update agent PID ────────────────────────────────────────────────
@@ -104,4 +118,29 @@ ralph_get() {
 # ── Get all PIDs ────────────────────────────────────────────────────
 ralph_all_pids() {
   jq -r '.agents[].pid' "$RALPH_STATE"
+}
+
+# ── Remove agent from state ─────────────────────────────────────────
+# Usage: ralph_remove_agent <id>
+ralph_remove_agent() {
+  local id="$1"
+  _ralph_update jq \
+    --arg id "$id" \
+    'del(.agents[$id]) |
+     .agents |= with_entries(.value.children = (.value.children | map(select(. != $id))))' \
+    "$RALPH_STATE"
+}
+
+# ── Mark agent archive metadata ────────────────────────────────────
+# Usage: ralph_archive_agent <id> <workspace>
+ralph_archive_agent() {
+  local id="$1" workspace="$2"
+  local now
+  now="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  _ralph_update jq \
+    --arg id "$id" \
+    --arg ws "$workspace" \
+    --arg now "$now" \
+    '.agents[$id].archived_at = $now | .agents[$id].workspace = $ws' \
+    "$RALPH_STATE"
 }
