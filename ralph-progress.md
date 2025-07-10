@@ -1,8 +1,16 @@
 # Ralph Progress
 
 ## 2026-02-07
+- Adds recent command to list latest completed agents with durations and status filtering.
+- Documents the recent command in the README.
+
+## 2026-02-07
 - Adds an archive command to move completed agent run folders into runs/archive.
 - Records archive metadata in state helpers to track archived workspaces.
+
+## 2026-02-07
+- Adds type filtering to the recent command for narrowing by agent class.
+- Documents the recent command in the README.
 
 ## 2026-02-07
 - Adds a metrics command to summarize agent counts, type breakdowns, and duration stats.

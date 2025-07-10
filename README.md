@@ -39,12 +39,14 @@ BigRalph (CEO, runs forever)
 | `./status.sh` | View the agent tree |
 | `./status.sh --verbose` | View the agent tree with timestamps and durations |
 | `./health.sh` | Summarize agent health, stale processes, and oldest running agent |
+| `./recent.sh` | List recently ended agents with durations (defaults to done + failed) |
 | `./audit.sh` | Audit state integrity (schema, parent/child consistency, status) |
 | `./sweep.sh` | Marks stale running agents as failed in state |
 | `./archive.sh` | Archives completed agent run directories into runs/archive |
 | `./prune.sh` | Removes completed agents from state (skips those with running children) |
 | `./snapshot.sh` | Captures a timestamped state snapshot and summary |
 | `./metrics.sh` | Summarize agent counts, types, and duration stats |
+| `./recent.sh` | Show recent agents with optional status/type filters |
 | `./stop.sh` | Emergency stop all agents |
 
 ## Structure
