@@ -4,13 +4,38 @@ RALPH_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$RALPH_DIR/state/helpers.sh"
 
 VERBOSE=0
-case "${1:-}" in
-  -v|--verbose) VERBOSE=1 ;;
-  -h|--help)
-    echo "Usage: ./status.sh [-v|--verbose]"
-    exit 0
-    ;;
-esac
+STATUS_FILTER=""
+TYPE_FILTER=""
+
+usage() {
+  echo "Usage: ./status.sh [-v|--verbose] [--status running|done|failed] [--type bigralph|productralph|coderalph]"
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -v|--verbose)
+      VERBOSE=1
+      shift
+      ;;
+    --status)
+      STATUS_FILTER="$2"
+      shift 2
+      ;;
+    --type)
+      TYPE_FILTER="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1"
+      usage
+      exit 1
+      ;;
+  esac
+done
 
 # ── Colors ──────────────────────────────────────────────────────────
 BOLD='\033[1m'
@@ -67,10 +92,61 @@ format_duration() {
   fi
 }
 
+csv_contains() {
+  local list="$1" value="$2"
+  IFS=',' read -r -a items <<< "$list"
+  for item in "${items[@]}"; do
+    if [ "$item" = "$value" ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+node_matches() {
+  local status="$1" type="$2"
+  if [ -n "$STATUS_FILTER" ]; then
+    if ! csv_contains "$STATUS_FILTER" "$status"; then
+      return 1
+    fi
+  fi
+  if [ -n "$TYPE_FILTER" ]; then
+    if ! csv_contains "$TYPE_FILTER" "$type"; then
+      return 1
+    fi
+  fi
+  return 0
+}
+
+node_has_match() {
+  local id="$1"
+  local status type
+  status=$(ralph_get "$id" status)
+  type=$(ralph_get "$id" type)
+
+  if node_matches "$status" "$type"; then
+    return 0
+  fi
+
+  local children
+  children=$(jq -r --arg id "$id" '.agents[$id].children[]?' "$RALPH_STATE")
+  for child in $children; do
+    if node_has_match "$child"; then
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 # ── Print a node and its children recursively ───────────────────────
 print_node() {
   local id="$1" indent="$2"
   local status type task pid alive started ended line details duration
+
+  if ! node_has_match "$id"; then
+    return
+  fi
 
   status=$(ralph_get "$id" status)
   type=$(ralph_get "$id" type)

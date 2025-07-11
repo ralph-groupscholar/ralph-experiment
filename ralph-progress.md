@@ -1,6 +1,10 @@
 # Ralph Progress
 
 ## 2026-02-07
+- Adds status/type filtering to status output while keeping matching descendants visible.
+- Updates the README to mention status filtering support.
+
+## 2026-02-07
 - Adds recent command to list latest completed agents with durations and status filtering.
 - Documents the recent command in the README.
 
@@ -48,3 +52,7 @@
 - Adds a prune command to remove completed agents from state with a dry-run option and child-safety check.
 - Adds a helper to delete agents while keeping parent child lists clean.
 - Documents the new prune command in the README.
+
+## 2026-02-07
+- Adds a lineage command to show ancestry for any agent with timestamps.
+- Documents the lineage command in the README.
