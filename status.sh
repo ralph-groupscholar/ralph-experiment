@@ -4,17 +4,22 @@ RALPH_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$RALPH_DIR/state/helpers.sh"
 
 VERBOSE=0
+JSON=0
 STATUS_FILTER=""
 TYPE_FILTER=""
 
 usage() {
-  echo "Usage: ./status.sh [-v|--verbose] [--status running|done|failed] [--type bigralph|productralph|coderalph]"
+  echo "Usage: ./status.sh [-v|--verbose] [-j|--json] [--status running|done|failed] [--type bigralph|productralph|coderalph]"
 }
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -v|--verbose)
       VERBOSE=1
+      shift
+      ;;
+    -j|--json)
+      JSON=1
       shift
       ;;
     --status)
@@ -208,7 +213,77 @@ print_node() {
   done
 }
 
+emit_json() {
+  local now now_epoch
+  now="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  now_epoch="$(date -u +%s)"
+
+  if [ ! -f "$RALPH_STATE" ]; then
+    echo '{"error":"Finds no state file. Runs ./start.sh first."}'
+    return 0
+  fi
+
+  local tmp
+  tmp="$(mktemp)"
+  trap 'rm -f "$tmp"' EXIT
+
+  while IFS=$'\t' read -r id status pid started ended; do
+    local alive start_epoch end_epoch duration_value
+    alive=false
+    if [ "$status" = "running" ] && kill -0 "$pid" 2>/dev/null; then
+      alive=true
+    fi
+
+    duration_value=""
+    if [ -n "$started" ] && [ "$started" != "null" ]; then
+      start_epoch=$(to_epoch "$started")
+      if [ -n "$ended" ] && [ "$ended" != "null" ]; then
+        end_epoch=$(to_epoch "$ended")
+      else
+        end_epoch="$now_epoch"
+      fi
+
+      if [ -n "$start_epoch" ] && [ -n "$end_epoch" ]; then
+        duration_value=$((end_epoch - start_epoch))
+        if [ "$duration_value" -lt 0 ]; then
+          duration_value=0
+        fi
+      fi
+    fi
+
+    printf "%s\t%s\t%s\n" "$id" "$alive" "$duration_value" >> "$tmp"
+  done < <(jq -r '.agents | to_entries[] | [.key, .value.status, (.value.pid | tostring), (.value.started_at // ""), (.value.ended_at // "")] | @tsv' "$RALPH_STATE")
+
+  local maps
+  maps="$(jq -R -s '
+    split("\n")[:-1]
+    | map(split("\t"))
+    | {
+        alive_map: (map({key: .[0], value: (.[1] == "true")}) | from_entries),
+        duration_map: (map({key: .[0], value: (.[2] | if . == "" then null else (tonumber) end)}) | from_entries)
+      }
+  ' "$tmp")"
+
+  jq \
+    --arg now "$now" \
+    --argjson maps "$maps" \
+    '{
+      generated_at: $now,
+      agent_count: (.agents | length),
+      roots: [.agents[] | select(.parent == null and .id != null) | .id],
+      agents: (.agents | with_entries(
+        .value.alive = ($maps.alive_map[.key] // false)
+        | .value.duration_seconds = ($maps.duration_map[.key] // null)
+      ))
+    }' "$RALPH_STATE"
+}
+
 # ── Main ────────────────────────────────────────────────────────────
+if [ "$JSON" -eq 1 ]; then
+  emit_json
+  exit 0
+fi
+
 echo ""
 echo -e "  ${CYAN}${BOLD}ralph status${RESET}"
 echo -e "  ${DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
@@ -223,13 +298,13 @@ fi
 agent_count=$(jq '.agents | length' "$RALPH_STATE")
 
 if [ "$agent_count" = "0" ]; then
-  echo -e "  ${DIM}No agents running. Start with ./start.sh${RESET}"
+  echo -e "  ${DIM}Finds no agents running. Starts with ./start.sh${RESET}"
   echo ""
   exit 0
 fi
 
 # Find root agents (no parent)
-roots=$(jq -r '[.agents[] | select(.parent == null)] | .[].id' "$RALPH_STATE")
+roots=$(jq -r '[.agents[] | select(.parent == null and .id != null)] | .[].id' "$RALPH_STATE")
 for root in $roots; do
   print_node "$root" "  "
 done

@@ -36,8 +36,9 @@ BigRalph (CEO, runs forever)
 | Command | What it does |
 |---------|-------------|
 | `./start.sh` | Launch BigRalph (the only command you need) |
-| `./status.sh` | View the agent tree (supports status/type filters) |
-| `./status.sh --verbose` | View the agent tree with timestamps and durations |
+| `./status.sh` | Views the agent tree (supports status/type filters) |
+| `./status.sh --verbose` | Views the agent tree with timestamps and durations |
+| `./status.sh --json` | Emits machine-readable status JSON |
 | `./health.sh` | Summarize agent health, stale processes, and oldest running agent |
 | `./recent.sh` | Show recent agents with optional status/type filters |
 | `./audit.sh` | Audit state integrity (schema, parent/child consistency, status) |
@@ -47,6 +48,7 @@ BigRalph (CEO, runs forever)
 | `./snapshot.sh` | Captures a timestamped state snapshot and summary |
 | `./metrics.sh` | Summarize agent counts, types, and duration stats |
 | `./lineage.sh` | Show the ancestry path for a specific agent |
+| `./workspace.sh` | Audits workspaces for missing or orphaned run directories |
 | `./stop.sh` | Emergency stop all agents |
 
 ## Structure

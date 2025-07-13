@@ -1,6 +1,14 @@
 # Ralph Progress
 
 ## 2026-02-07
+- Adds a status JSON output mode with alive checks and duration seconds.
+- Documents the status JSON flag in the README.
+
+## 2026-02-07
+- Adds a workspace audit command to surface missing workspace paths and orphaned run directories.
+- Documents the workspace command in the README.
+
+## 2026-02-07
 - Adds status/type filtering to status output while keeping matching descendants visible.
 - Updates the README to mention status filtering support.
 
