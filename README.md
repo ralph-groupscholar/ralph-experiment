@@ -48,6 +48,7 @@ BigRalph (CEO, runs forever)
 | `./snapshot.sh` | Captures a timestamped state snapshot and summary |
 | `./metrics.sh` | Summarize agent counts, types, and duration stats |
 | `./lineage.sh` | Show the ancestry path for a specific agent |
+| `./timeline.sh` | Shows a chronological agent timeline with durations and filters |
 | `./workspace.sh` | Audits workspaces for missing or orphaned run directories |
 | `./stop.sh` | Emergency stop all agents |
 

@@ -1,6 +1,10 @@
 # Ralph Progress
 
 ## 2026-02-07
+- Adds a timeline command to list agents chronologically with durations and filters.
+- Documents the timeline command in the README.
+
+## 2026-02-07
 - Adds a status JSON output mode with alive checks and duration seconds.
 - Documents the status JSON flag in the README.
 
