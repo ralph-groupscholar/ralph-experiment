@@ -46,9 +46,12 @@ BigRalph (CEO, runs forever)
 | `./archive.sh` | Archives completed agent run directories into runs/archive |
 | `./prune.sh` | Removes completed agents from state (skips those with running children) |
 | `./snapshot.sh` | Captures a timestamped state snapshot and summary |
+| `./compare.sh` | Compares two snapshots (latest vs previous by default; use --list to browse) |
 | `./metrics.sh` | Summarize agent counts, types, and duration stats |
 | `./lineage.sh` | Show the ancestry path for a specific agent |
+| `./find.sh` | Finds agents by keyword across task, id, or workspace fields |
 | `./timeline.sh` | Shows a chronological agent timeline with durations and filters |
+| `./overdue.sh` | Shows running agents over a duration threshold with optional filters |
 | `./workspace.sh` | Audits workspaces for missing or orphaned run directories |
 | `./stop.sh` | Emergency stop all agents |
 

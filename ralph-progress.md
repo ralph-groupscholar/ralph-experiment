@@ -1,6 +1,14 @@
 # Ralph Progress
 
 ## 2026-02-07
+- Adds a compare command to show deltas between snapshots, including new agents and status changes.
+- Documents the compare command in the README.
+
+## 2026-02-07
+- Adds a find command to locate agents by keyword across task, id, or workspace fields.
+- Documents the new find command in the README.
+
+## 2026-02-07
 - Adds a timeline command to list agents chronologically with durations and filters.
 - Documents the timeline command in the README.
 
@@ -68,3 +76,11 @@
 ## 2026-02-07
 - Adds a lineage command to show ancestry for any agent with timestamps.
 - Documents the lineage command in the README.
+
+## 2026-02-07
+- Adds an overdue command to list running agents beyond a duration threshold.
+- Documents the overdue command in the README.
+
+## 2026-02-07
+- Adds compare --list support to browse snapshot history with quick agent counts.
+- Documents compare listing in the README.
