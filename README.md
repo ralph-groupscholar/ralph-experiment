@@ -53,6 +53,7 @@ BigRalph (CEO, runs forever)
 | `./timeline.sh` | Shows a chronological agent timeline with durations and filters |
 | `./overdue.sh` | Shows running agents over a duration threshold with optional filters |
 | `./workspace.sh` | Audits workspaces for missing or orphaned run directories |
+| `./inspect.sh` | Shows detailed info for a single agent with pid/workspace health |
 | `./stop.sh` | Emergency stop all agents |
 
 ## Structure

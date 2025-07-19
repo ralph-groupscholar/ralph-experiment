@@ -84,3 +84,7 @@
 ## 2026-02-07
 - Adds compare --list support to browse snapshot history with quick agent counts.
 - Documents compare listing in the README.
+
+## 2026-02-07
+- Adds an inspect command to show agent details, child status counts, and pid/workspace health.
+- Documents the inspect command in the README.
