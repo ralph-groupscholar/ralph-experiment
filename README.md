@@ -54,6 +54,9 @@ BigRalph (CEO, runs forever)
 | `./overdue.sh` | Shows running agents over a duration threshold with optional filters |
 | `./workspace.sh` | Audits workspaces for missing or orphaned run directories |
 | `./inspect.sh` | Shows detailed info for a single agent with pid/workspace health |
+| `./annotate.sh` | Adds notes and tags to agents |
+| `./report.sh` | Writes a markdown report of current and recent agent activity |
+| `./export.sh` | Exports agent data to CSV or JSON with filters |
 | `./stop.sh` | Emergency stop all agents |
 
 ## Structure

@@ -1,6 +1,20 @@
 # Ralph Progress
 
 ## 2026-02-07
+- Adds export command for CSV/JSON agent data with filters and durations.
+- Documents the export command in the README.
+
+## 2026-02-07
+- Adds agent annotation support with tags/notes, plus inspect visibility.
+
+## 2026-02-07
+- Expands report output with agent type breakdowns and duration stats.
+
+## 2026-02-07
+- Adds a report command that writes a markdown snapshot of current and recent agent activity.
+- Documents the report command in the README.
+
+## 2026-02-07
 - Adds a compare command to show deltas between snapshots, including new agents and status changes.
 - Documents the compare command in the README.
 
