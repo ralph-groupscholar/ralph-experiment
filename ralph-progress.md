@@ -1,6 +1,10 @@
 # Ralph Progress
 
 ## 2026-02-07
+- Adds Postgres sync command for agent state with optional filters and schema support.
+- Documents database sync usage in the README.
+
+## 2026-02-07
 - Adds export command for CSV/JSON agent data with filters and durations.
 - Documents the export command in the README.
 
@@ -102,3 +106,7 @@
 ## 2026-02-07
 - Adds an inspect command to show agent details, child status counts, and pid/workspace health.
 - Documents the inspect command in the README.
+
+## 2026-02-07
+- Adds notes command to list agents with annotations and filtering options.
+- Documents the notes command in the README.

@@ -55,8 +55,10 @@ BigRalph (CEO, runs forever)
 | `./workspace.sh` | Audits workspaces for missing or orphaned run directories |
 | `./inspect.sh` | Shows detailed info for a single agent with pid/workspace health |
 | `./annotate.sh` | Adds notes and tags to agents |
+| `./notes.sh` | Lists agents with notes/tags and optional filters |
 | `./report.sh` | Writes a markdown report of current and recent agent activity |
 | `./export.sh` | Exports agent data to CSV or JSON with filters |
+| `./sync.sh` | Syncs agent state to Postgres (requires `RALPH_DATABASE_URL`) |
 | `./stop.sh` | Emergency stop all agents |
 
 ## Structure
@@ -91,3 +93,7 @@ Edit these to change how ralphs behave. Keep them short — creativity comes fro
 ## Self-extensibility
 
 BigRalph can create new skills in `org/skills/`, add departments to `org/about.md`, and spawn ProductRalphs for anything he imagines. The system is designed to grow on its own.
+
+## Database sync
+
+`./sync.sh` pushes agent state into Postgres for reporting dashboards and long-term storage. It uses the `RALPH_DATABASE_URL` environment variable and defaults to the `ralph_experiment` schema with an `agent_state` table.
