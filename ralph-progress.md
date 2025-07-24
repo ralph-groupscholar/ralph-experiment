@@ -1,6 +1,9 @@
 # Ralph Progress
 
 ## 2026-02-07
+- Adds an inspect command to surface agent details, workspace health, and log tail output.
+
+## 2026-02-07
 - Adds Postgres sync command for agent state with optional filters and schema support.
 - Documents database sync usage in the README.
 
