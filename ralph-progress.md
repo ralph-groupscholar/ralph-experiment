@@ -1,5 +1,9 @@
 # Ralph Progress
 
+## 2026-02-08
+- Adds restore command to reload state from snapshots with optional backups.
+- Documents snapshot restore usage in the README.
+
 ## 2026-02-07
 - Adds an inspect command to surface agent details, workspace health, and log tail output.
 
