@@ -1,6 +1,10 @@
 # Ralph Progress
 
 ## 2026-02-08
+- Adds mark command for manually updating agent status.
+- Documents the new mark command in the README.
+
+## 2026-02-08
 - Adds restore command to reload state from snapshots with optional backups.
 - Documents snapshot restore usage in the README.
 

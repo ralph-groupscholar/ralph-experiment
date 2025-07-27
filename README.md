@@ -57,6 +57,7 @@ BigRalph (CEO, runs forever)
 | `./inspect.sh` | Shows detailed info for a single agent with pid/workspace health |
 | `./annotate.sh` | Adds notes and tags to agents |
 | `./notes.sh` | Lists agents with notes/tags and optional filters |
+| `./mark.sh` | Marks an agent status manually (running, done, failed) |
 | `./report.sh` | Writes a markdown report of current and recent agent activity |
 | `./export.sh` | Exports agent data to CSV or JSON with filters |
 | `./sync.sh` | Syncs agent state to Postgres (requires `RALPH_DATABASE_URL`) |
