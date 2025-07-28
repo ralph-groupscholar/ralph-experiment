@@ -144,3 +144,68 @@ ralph_archive_agent() {
     '.agents[$id].archived_at = $now | .agents[$id].workspace = $ws' \
     "$RALPH_STATE"
 }
+
+# ── Mark agent purge metadata ──────────────────────────────────────
+# Usage: ralph_purge_agent <id> <workspace>
+ralph_purge_agent() {
+  local id="$1" workspace="$2"
+  local now
+  now="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  _ralph_update jq \
+    --arg id "$id" \
+    --arg ws "$workspace" \
+    --arg now "$now" \
+    '.agents[$id].purged_at = $now
+     | .agents[$id].purged_workspace = $ws
+     | .agents[$id].workspace = null' \
+    "$RALPH_STATE"
+}
+
+# ── Notes and tags ─────────────────────────────────────────────────
+# Usage: ralph_set_note <id> <note>
+ralph_set_note() {
+  local id="$1" note="$2"
+  _ralph_update jq \
+    --arg id "$id" \
+    --arg note "$note" \
+    '.agents[$id].note = $note' \
+    "$RALPH_STATE"
+}
+
+# Usage: ralph_clear_note <id>
+ralph_clear_note() {
+  local id="$1"
+  _ralph_update jq \
+    --arg id "$id" \
+    '.agents[$id].note = null' \
+    "$RALPH_STATE"
+}
+
+# Usage: ralph_add_tag <id> <tag>
+ralph_add_tag() {
+  local id="$1" tag="$2"
+  _ralph_update jq \
+    --arg id "$id" \
+    --arg tag "$tag" \
+    '.agents[$id].tags = ((.agents[$id].tags // []) + [$tag] | unique)' \
+    "$RALPH_STATE"
+}
+
+# Usage: ralph_remove_tag <id> <tag>
+ralph_remove_tag() {
+  local id="$1" tag="$2"
+  _ralph_update jq \
+    --arg id "$id" \
+    --arg tag "$tag" \
+    '.agents[$id].tags = ((.agents[$id].tags // []) | map(select(. != $tag)))' \
+    "$RALPH_STATE"
+}
+
+# Usage: ralph_clear_tags <id>
+ralph_clear_tags() {
+  local id="$1"
+  _ralph_update jq \
+    --arg id "$id" \
+    '.agents[$id].tags = []' \
+    "$RALPH_STATE"
+}

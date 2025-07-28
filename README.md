@@ -44,6 +44,7 @@ BigRalph (CEO, runs forever)
 | `./audit.sh` | Audit state integrity (schema, parent/child consistency, status) |
 | `./sweep.sh` | Marks stale running agents as failed in state |
 | `./archive.sh` | Archives completed agent run directories into runs/archive |
+| `./purge.sh` | Removes archived agent run directories past an age threshold |
 | `./prune.sh` | Removes completed agents from state (skips those with running children) |
 | `./snapshot.sh` | Captures a timestamped state snapshot and summary |
 | `./compare.sh` | Compares two snapshots (latest vs previous by default; use --list to browse) |
@@ -56,6 +57,7 @@ BigRalph (CEO, runs forever)
 | `./workspace.sh` | Audits workspaces for missing or orphaned run directories |
 | `./inspect.sh` | Shows detailed info for a single agent with pid/workspace health |
 | `./annotate.sh` | Adds notes and tags to agents |
+| `./mark.sh` | Manually marks agent status with optional notes/tags |
 | `./notes.sh` | Lists agents with notes/tags and optional filters |
 | `./mark.sh` | Marks an agent status manually (running, done, failed) |
 | `./report.sh` | Writes a markdown report of current and recent agent activity |

@@ -8,6 +8,10 @@
 - Adds restore command to reload state from snapshots with optional backups.
 - Documents snapshot restore usage in the README.
 
+## 2026-02-08
+- Adds purge command to delete archived run directories past an age threshold.
+- Records purge metadata in state helpers while clearing archived workspace paths.
+
 ## 2026-02-07
 - Adds an inspect command to surface agent details, workspace health, and log tail output.
 
