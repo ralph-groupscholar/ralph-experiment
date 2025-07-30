@@ -1,8 +1,20 @@
 # Ralph Progress
 
 ## 2026-02-08
+- Adds tags command to summarize tag usage with status breakdowns.
+- Documents the new tags command in the README.
+
+## 2026-02-08
 - Adds mark command for manually updating agent status.
 - Documents the new mark command in the README.
+
+## 2026-02-08
+- Adds graph command to render the agent tree as Graphviz DOT or image outputs.
+- Documents the graph command and updates command verbs in the README.
+
+## 2026-02-08
+- Expands mark command to support notes/tags when updating agent status.
+- Documents the enhanced mark command in the README.
 
 ## 2026-02-08
 - Adds restore command to reload state from snapshots with optional backups.

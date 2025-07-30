@@ -35,13 +35,13 @@ BigRalph (CEO, runs forever)
 
 | Command | What it does |
 |---------|-------------|
-| `./start.sh` | Launch BigRalph (the only command you need) |
+| `./start.sh` | Launches BigRalph (the only command needed) |
 | `./status.sh` | Views the agent tree (supports status/type filters) |
 | `./status.sh --verbose` | Views the agent tree with timestamps and durations |
 | `./status.sh --json` | Emits machine-readable status JSON |
-| `./health.sh` | Summarize agent health, stale processes, and oldest running agent |
-| `./recent.sh` | Show recent agents with optional status/type filters |
-| `./audit.sh` | Audit state integrity (schema, parent/child consistency, status) |
+| `./health.sh` | Summarizes agent health, stale processes, and oldest running agent |
+| `./recent.sh` | Shows recent agents with optional status/type filters |
+| `./audit.sh` | Audits state integrity (schema, parent/child consistency, status) |
 | `./sweep.sh` | Marks stale running agents as failed in state |
 | `./archive.sh` | Archives completed agent run directories into runs/archive |
 | `./purge.sh` | Removes archived agent run directories past an age threshold |
@@ -49,8 +49,8 @@ BigRalph (CEO, runs forever)
 | `./snapshot.sh` | Captures a timestamped state snapshot and summary |
 | `./compare.sh` | Compares two snapshots (latest vs previous by default; use --list to browse) |
 | `./restore.sh` | Restores state from a snapshot (backs up current state by default) |
-| `./metrics.sh` | Summarize agent counts, types, and duration stats |
-| `./lineage.sh` | Show the ancestry path for a specific agent |
+| `./metrics.sh` | Summarizes agent counts, types, and duration stats |
+| `./lineage.sh` | Shows the ancestry path for a specific agent |
 | `./find.sh` | Finds agents by keyword across task, id, or workspace fields |
 | `./timeline.sh` | Shows a chronological agent timeline with durations and filters |
 | `./overdue.sh` | Shows running agents over a duration threshold with optional filters |
@@ -59,7 +59,8 @@ BigRalph (CEO, runs forever)
 | `./annotate.sh` | Adds notes and tags to agents |
 | `./mark.sh` | Manually marks agent status with optional notes/tags |
 | `./notes.sh` | Lists agents with notes/tags and optional filters |
-| `./mark.sh` | Marks an agent status manually (running, done, failed) |
+| `./tags.sh` | Summarizes tag usage with status breakdowns |
+| `./graph.sh` | Generates Graphviz DOT output for the agent tree (optional rendered formats) |
 | `./report.sh` | Writes a markdown report of current and recent agent activity |
 | `./export.sh` | Exports agent data to CSV or JSON with filters |
 | `./sync.sh` | Syncs agent state to Postgres (requires `RALPH_DATABASE_URL`) |
