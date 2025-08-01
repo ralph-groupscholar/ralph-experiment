@@ -5,6 +5,10 @@
 - Documents the new tags command in the README.
 
 ## 2026-02-08
+- Adds event logging to state helpers plus events command for filtering the agent activity log.
+- Documents the events log in the README.
+
+## 2026-02-08
 - Adds mark command for manually updating agent status.
 - Documents the new mark command in the README.
 

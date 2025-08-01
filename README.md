@@ -59,6 +59,7 @@ BigRalph (CEO, runs forever)
 | `./annotate.sh` | Adds notes and tags to agents |
 | `./mark.sh` | Manually marks agent status with optional notes/tags |
 | `./notes.sh` | Lists agents with notes/tags and optional filters |
+| `./events.sh` | Lists recent agent state events with filtering options |
 | `./tags.sh` | Summarizes tag usage with status breakdowns |
 | `./graph.sh` | Generates Graphviz DOT output for the agent tree (optional rendered formats) |
 | `./report.sh` | Writes a markdown report of current and recent agent activity |
@@ -73,6 +74,7 @@ ralph/
 ├── start.sh / stop.sh / status.sh    # Entry points
 ├── state/
 │   ├── tree.json                      # Agent tree (central state)
+│   ├── events.jsonl                   # Append-only event log
 │   └── helpers.sh                     # State management utilities
 ├── agents/
 │   ├── bigralph/                      # CEO agent

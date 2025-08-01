@@ -4,6 +4,23 @@
 
 RALPH_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RALPH_STATE="$RALPH_ROOT/state/tree.json"
+RALPH_EVENTS="$RALPH_ROOT/state/events.jsonl"
+
+# ── Event logging ──────────────────────────────────────────────────
+# Usage: ralph_log_event <event> <agent_id> [detail_json]
+ralph_log_event() {
+  local event="$1" id="$2" detail_json="${3:-{}}"
+  local now entry
+  now="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  entry="$(jq -cn \
+    --arg ts "$now" \
+    --arg event "$event" \
+    --arg id "$id" \
+    --argjson detail "$detail_json" \
+    '{ts: $ts, event: $event, agent: $id, detail: $detail}')"
+  mkdir -p "$(dirname "$RALPH_EVENTS")"
+  printf "%s\n" "$entry" >> "$RALPH_EVENTS"
+}
 
 # ── Internal: atomic JSON update (lock-free via temp + mv) ──────────
 _ralph_update() {
@@ -42,6 +59,13 @@ ralph_register() {
   if [ "$parent" != "null" ]; then
     ralph_add_child "$parent" "$id"
   fi
+  ralph_log_event "register" "$id" "$(jq -cn \
+    --arg type "$type" \
+    --arg parent "$parent" \
+    --arg task "$task" \
+    --arg ws "$workspace" \
+    --arg pid "$$" \
+    '{type: $type, parent: (if $parent == "null" then null else $parent end), task: $task, workspace: $ws, pid: ($pid | tonumber)}')"
 }
 
 # ── Update agent status ─────────────────────────────────────────────
@@ -67,6 +91,7 @@ ralph_update_status() {
         else .
         end
     ' "$RALPH_STATE"
+  ralph_log_event "status" "$id" "$(jq -cn --arg status "$status" '{status: $status}')"
 }
 
 # ── Update agent PID ────────────────────────────────────────────────
@@ -77,6 +102,7 @@ ralph_update_pid() {
     --arg id "$id" \
     --arg pid "$pid" \
     '.agents[$id].pid = ($pid | tonumber)' "$RALPH_STATE"
+  ralph_log_event "pid" "$id" "$(jq -cn --arg pid "$pid" '{pid: ($pid | tonumber)}')"
 }
 
 # ── Add child to parent ─────────────────────────────────────────────
@@ -87,6 +113,7 @@ ralph_add_child() {
     --arg pid "$parent_id" \
     --arg cid "$child_id" \
     '.agents[$pid].children += [$cid] | .agents[$pid].children |= unique' "$RALPH_STATE"
+  ralph_log_event "child_add" "$parent_id" "$(jq -cn --arg child "$child_id" '{child: $child}')"
 }
 
 # ── Check if all children of a parent are done ──────────────────────
@@ -129,6 +156,7 @@ ralph_remove_agent() {
     'del(.agents[$id]) |
      .agents |= with_entries(.value.children = (.value.children | map(select(. != $id))))' \
     "$RALPH_STATE"
+  ralph_log_event "remove" "$id"
 }
 
 # ── Mark agent archive metadata ────────────────────────────────────
@@ -143,6 +171,7 @@ ralph_archive_agent() {
     --arg now "$now" \
     '.agents[$id].archived_at = $now | .agents[$id].workspace = $ws' \
     "$RALPH_STATE"
+  ralph_log_event "archive" "$id" "$(jq -cn --arg ws "$workspace" '{workspace: $ws}')"
 }
 
 # ── Mark agent purge metadata ──────────────────────────────────────
@@ -159,6 +188,7 @@ ralph_purge_agent() {
      | .agents[$id].purged_workspace = $ws
      | .agents[$id].workspace = null' \
     "$RALPH_STATE"
+  ralph_log_event "purge" "$id" "$(jq -cn --arg ws "$workspace" '{workspace: $ws}')"
 }
 
 # ── Notes and tags ─────────────────────────────────────────────────
@@ -170,6 +200,7 @@ ralph_set_note() {
     --arg note "$note" \
     '.agents[$id].note = $note' \
     "$RALPH_STATE"
+  ralph_log_event "note_set" "$id" "$(jq -cn --arg note "$note" '{note: $note}')"
 }
 
 # Usage: ralph_clear_note <id>
@@ -179,6 +210,7 @@ ralph_clear_note() {
     --arg id "$id" \
     '.agents[$id].note = null' \
     "$RALPH_STATE"
+  ralph_log_event "note_clear" "$id"
 }
 
 # Usage: ralph_add_tag <id> <tag>
@@ -189,6 +221,7 @@ ralph_add_tag() {
     --arg tag "$tag" \
     '.agents[$id].tags = ((.agents[$id].tags // []) + [$tag] | unique)' \
     "$RALPH_STATE"
+  ralph_log_event "tag_add" "$id" "$(jq -cn --arg tag "$tag" '{tag: $tag}')"
 }
 
 # Usage: ralph_remove_tag <id> <tag>
@@ -199,6 +232,7 @@ ralph_remove_tag() {
     --arg tag "$tag" \
     '.agents[$id].tags = ((.agents[$id].tags // []) | map(select(. != $tag)))' \
     "$RALPH_STATE"
+  ralph_log_event "tag_remove" "$id" "$(jq -cn --arg tag "$tag" '{tag: $tag}')"
 }
 
 # Usage: ralph_clear_tags <id>
@@ -208,4 +242,5 @@ ralph_clear_tags() {
     --arg id "$id" \
     '.agents[$id].tags = []' \
     "$RALPH_STATE"
+  ralph_log_event "tags_clear" "$id"
 }
