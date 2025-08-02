@@ -1,6 +1,10 @@
 # Ralph Progress
 
 ## 2026-02-08
+- Adds activity command to summarize event volume by type and agent with time filters.
+- Documents the new activity command in the README.
+
+## 2026-02-08
 - Adds tags command to summarize tag usage with status breakdowns.
 - Documents the new tags command in the README.
 

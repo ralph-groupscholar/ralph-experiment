@@ -60,6 +60,7 @@ BigRalph (CEO, runs forever)
 | `./mark.sh` | Manually marks agent status with optional notes/tags |
 | `./notes.sh` | Lists agents with notes/tags and optional filters |
 | `./events.sh` | Lists recent agent state events with filtering options |
+| `./activity.sh` | Summarizes event activity by type and agent with time filters |
 | `./tags.sh` | Summarizes tag usage with status breakdowns |
 | `./graph.sh` | Generates Graphviz DOT output for the agent tree (optional rendered formats) |
 | `./report.sh` | Writes a markdown report of current and recent agent activity |
