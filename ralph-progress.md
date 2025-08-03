@@ -1,6 +1,13 @@
 # Ralph Progress
 
 ## 2026-02-08
+- Adds hubs command to surface agents with the most children plus child status breakdowns and filters.
+- Adds hubs test fixture and script.
+- Adds reparent command to move agents between parents or root with cycle checks.
+- Updates state helpers with child removal and reparent logging.
+- Documents the reparent command in the README.
+
+## 2026-02-08
 - Adds activity command to summarize event volume by type and agent with time filters.
 - Documents the new activity command in the README.
 

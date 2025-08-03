@@ -62,7 +62,9 @@ BigRalph (CEO, runs forever)
 | `./events.sh` | Lists recent agent state events with filtering options |
 | `./activity.sh` | Summarizes event activity by type and agent with time filters |
 | `./tags.sh` | Summarizes tag usage with status breakdowns |
+| `./hubs.sh` | Shows agents with the most children and child status breakdowns |
 | `./graph.sh` | Generates Graphviz DOT output for the agent tree (optional rendered formats) |
+| `./reparent.sh` | Reassigns an agent to a new parent (or root) |
 | `./report.sh` | Writes a markdown report of current and recent agent activity |
 | `./export.sh` | Exports agent data to CSV or JSON with filters |
 | `./sync.sh` | Syncs agent state to Postgres (requires `RALPH_DATABASE_URL`) |
@@ -87,6 +89,12 @@ ralph/
 │   ├── decisions.md                   # Decision log
 │   └── skills/                        # Extensible skills
 └── runs/                              # Active agent instances
+```
+
+## Tests
+
+```bash
+./tests/hubs_test.sh
 ```
 
 ## Editing prompts

@@ -1,0 +1,47 @@
+{
+  "agents": {
+    "big": {
+      "id": "big",
+      "type": "bigralph",
+      "status": "running",
+      "children": ["prod1", "prod2"],
+      "task": "Lead",
+      "started_at": "2026-02-07T01:00:00Z"
+    },
+    "prod1": {
+      "id": "prod1",
+      "type": "productralph",
+      "status": "done",
+      "children": ["code1", "code2"],
+      "task": "Build",
+      "started_at": "2026-02-07T02:00:00Z",
+      "ended_at": "2026-02-07T03:00:00Z"
+    },
+    "prod2": {
+      "id": "prod2",
+      "type": "productralph",
+      "status": "running",
+      "children": [],
+      "task": "Docs",
+      "started_at": "2026-02-07T02:30:00Z"
+    },
+    "code1": {
+      "id": "code1",
+      "type": "coderalph",
+      "status": "done",
+      "children": [],
+      "task": "API",
+      "started_at": "2026-02-07T02:10:00Z",
+      "ended_at": "2026-02-07T02:40:00Z"
+    },
+    "code2": {
+      "id": "code2",
+      "type": "coderalph",
+      "status": "failed",
+      "children": [],
+      "task": "UI",
+      "started_at": "2026-02-07T02:15:00Z",
+      "ended_at": "2026-02-07T02:50:00Z"
+    }
+  }
+}
