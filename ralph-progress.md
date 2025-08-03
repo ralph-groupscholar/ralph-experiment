@@ -1,6 +1,21 @@
 # Ralph Progress
 
 ## 2026-02-08
+- Adds events-prune command to trim the events log with cutoff controls and dry-run safeguards.
+- Adds events prune fixture and test.
+- Documents events-prune in the README.
+
+## 2026-02-08
+- Adds bootstrap-db command to create Postgres tables, indexes, and seed data.
+- Adds a dry-run test for bootstrap-db output.
+- Documents the new bootstrap-db command and test.
+
+## 2026-02-08
+- Adds sync-events command to push agent event logs into Postgres with dedupe hashing.
+- Adds event sync dry-run test fixture and script.
+- Documents the new sync-events command and test.
+
+## 2026-02-08
 - Adds hubs command to surface agents with the most children plus child status breakdowns and filters.
 - Adds hubs test fixture and script.
 - Adds reparent command to move agents between parents or root with cycle checks.

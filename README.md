@@ -60,6 +60,7 @@ BigRalph (CEO, runs forever)
 | `./mark.sh` | Manually marks agent status with optional notes/tags |
 | `./notes.sh` | Lists agents with notes/tags and optional filters |
 | `./events.sh` | Lists recent agent state events with filtering options |
+| `./events-prune.sh` | Prunes older events from the event log (dry-run by default) |
 | `./activity.sh` | Summarizes event activity by type and agent with time filters |
 | `./tags.sh` | Summarizes tag usage with status breakdowns |
 | `./hubs.sh` | Shows agents with the most children and child status breakdowns |
@@ -68,6 +69,8 @@ BigRalph (CEO, runs forever)
 | `./report.sh` | Writes a markdown report of current and recent agent activity |
 | `./export.sh` | Exports agent data to CSV or JSON with filters |
 | `./sync.sh` | Syncs agent state to Postgres (requires `RALPH_DATABASE_URL`) |
+| `./sync-events.sh` | Syncs agent event logs to Postgres (requires `RALPH_DATABASE_URL`) |
+| `./bootstrap-db.sh` | Bootstraps Postgres schema, tables, and seed data (requires `RALPH_DATABASE_URL`) |
 | `./stop.sh` | Emergency stop all agents |
 
 ## Structure
@@ -95,6 +98,9 @@ ralph/
 
 ```bash
 ./tests/hubs_test.sh
+./tests/events_sync_test.sh
+./tests/events_prune_test.sh
+./tests/bootstrap_db_dry_run_test.sh
 ```
 
 ## Editing prompts
