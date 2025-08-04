@@ -1,0 +1,3 @@
+{"ts":"2026-02-07T10:00:00Z","event":"register","agent":"ProductRalph-001","detail":{"type":"productralph","task":"Draft workflow"}}
+{"ts":"2026-02-08T08:00:00Z","event":"status","agent":"ProductRalph-001","detail":{"status":"running"}}
+{"ts":"2026-02-08T09:00:00Z","event":"child_add","agent":"ProductRalph-001","detail":{"child":"CodeRalph-001a"}}

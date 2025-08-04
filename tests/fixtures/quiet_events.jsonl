@@ -1,0 +1,2 @@
+{"ts":"2026-02-07T01:10:00Z","event":"register","agent":"big","detail":{"type":"bigralph","task":"Lead"}}
+{"ts":"2026-02-08T09:45:00Z","event":"status","agent":"prod2","detail":{"status":"running"}}

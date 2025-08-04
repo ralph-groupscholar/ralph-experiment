@@ -116,6 +116,46 @@ ralph_add_child() {
   ralph_log_event "child_add" "$parent_id" "$(jq -cn --arg child "$child_id" '{child: $child}')"
 }
 
+# ── Remove child from parent ────────────────────────────────────────
+# Usage: ralph_remove_child <parent_id> <child_id>
+ralph_remove_child() {
+  local parent_id="$1" child_id="$2"
+  _ralph_update jq \
+    --arg pid "$parent_id" \
+    --arg cid "$child_id" \
+    '.agents[$pid].children = ((.agents[$pid].children // []) | map(select(. != $cid)))' "$RALPH_STATE"
+  ralph_log_event "child_remove" "$parent_id" "$(jq -cn --arg child "$child_id" '{child: $child}')"
+}
+
+# ── Reparent an agent ───────────────────────────────────────────────
+# Usage: ralph_reparent <child_id> <new_parent|"null">
+ralph_reparent() {
+  local child_id="$1" new_parent="$2"
+  local old_parent
+  old_parent="$(jq -r --arg id "$child_id" '.agents[$id].parent // "null"' "$RALPH_STATE")"
+
+  _ralph_update jq \
+    --arg child "$child_id" \
+    --arg old "$old_parent" \
+    --arg new "$new_parent" \
+    '
+      .agents[$child].parent = (if $new == "null" then null else $new end)
+      | if $old != "null" then
+          .agents[$old].children = ((.agents[$old].children // []) | map(select(. != $child)))
+        else .
+        end
+      | if $new != "null" then
+          .agents[$new].children = ((.agents[$new].children // []) + [$child] | unique)
+        else .
+        end
+    ' "$RALPH_STATE"
+
+  ralph_log_event "reparent" "$child_id" "$(jq -cn \
+    --arg from "$old_parent" \
+    --arg to "$new_parent" \
+    '{from: (if $from == "null" then null else $from end), to: (if $to == "null" then null else $to end)}')"
+}
+
 # ── Check if all children of a parent are done ──────────────────────
 # Usage: ralph_get_children_status <parent_id>
 # Outputs: "all_done", "some_running", or "no_children"

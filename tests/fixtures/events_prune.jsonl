@@ -1,0 +1,3 @@
+{"ts":"2026-02-06T10:00:00Z","event":"register","agent":"coderalph-1","detail":{"task":"setup"}}
+{"ts":"2026-02-08T12:00:00Z","event":"status","agent":"coderalph-1","detail":{"status":"done"}}
+{"ts":"2026-02-09T09:30:00Z","event":"note_set","agent":"coderalph-1","detail":{"note":"shipped"}}

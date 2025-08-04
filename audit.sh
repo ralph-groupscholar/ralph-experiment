@@ -42,7 +42,7 @@ missing_fields=$(jq -r --argjson req "$(printf '%s\n' "${REQUIRED_FIELDS[@]}" | 
   | to_entries[]
   | {id: .key, missing: ($req - (.value | keys))}
   | select(.missing | length > 0)
-  | "\(.id)\t\(.missing | join(\",\"))"
+  | "\(.id)\t\(.missing | join(","))"
 ' "$RALPH_STATE")
 
 invalid_status=$(jq -r '
@@ -74,9 +74,10 @@ parent_mismatch=$(jq -r '
   .agents as $agents
   | $agents
   | to_entries[]
+  | .key as $id
   | select(.value.parent != null)
-  | select(($agents[.value.parent].children // []) | index(.key) | not)
-  | "\(.key)\t\(.value.parent)"
+  | select(($agents[.value.parent].children // []) | index($id) | not)
+  | "\($id)\t\(.value.parent)"
 ' "$RALPH_STATE")
 
 child_mismatch=$(jq -r '
